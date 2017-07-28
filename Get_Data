@@ -1,0 +1,44 @@
+# pandas is an open source, BSD-licensed library providing high-performance,
+# easy-to-use data structures and data analysis tools for the Python programming language.
+
+import timestamp
+import os
+import indicadores as ind
+import plot_graph as pg
+import pandas as pd
+
+#URL to Get Data Frame
+FETCH_URL = "https://poloniex.com/public?command=returnChartData&currencyPair=%s&start=%d&end=%d&period=7200"
+DATA_DIR = "data"
+
+#Starts in 2015 1420070400 in 2017 1499212800
+start = 1498608000
+end = 1501113600
+
+#Get DataFrame
+df = pd.read_json("https://poloniex.com/public?command=return24hVolume")
+url = FETCH_URL % ('USDT_BTC', start, end)
+start = timestamp.timeConvert(start)
+end = timestamp.timeConvert(end)
+print("Get from %s to %s" % (start, end))
+
+#os.remove('USDT_BTC.csv')
+#Create a DataFrame from POloniex
+df = pd.read_json(url)
+#Create a CSV from Data Frame
+df.to_csv('USDT_BTC.csv', index=False)
+
+
+ind.delta(df)
+ind.movAverage(df,12,36)
+ind.movExpAvg(df,12,36)
+ind.MACD(df)
+ind.signal_Macd(df,34)
+ind.signal_Cross(df)
+
+df.to_csv('USDT_BTC.csv', index=False)
+df['zeros'] = 0
+pg.plot_Exp(df)
+
+
+
