@@ -4,8 +4,10 @@
 import timestamp
 import os
 import indicadores as ind
+import max_min as maxmin
 import plot_graph as pg
 import pandas as pd
+
 
 #URL to Get Data Frame
 FETCH_URL = "https://poloniex.com/public?command=returnChartData&currencyPair=%s&start=%d&end=%d&period=7200"
@@ -38,6 +40,7 @@ ind.signal_Cross(df)
 
 df.to_csv('USDT_BTC.csv', index=False)
 df['zeros'] = 0
+maxmin.maxmin_target()
 pg.plot_Exp(df)
 
 
